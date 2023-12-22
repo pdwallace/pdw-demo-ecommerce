@@ -61,14 +61,43 @@ export default defineType({
       type: 'proxyString',
       options: {field: 'store.slug.current'},
     }),
-    // Color theme
+    // Show hero
     defineField({
-      name: 'colorTheme',
-      title: 'Color theme',
-      type: 'reference',
-      to: [{type: 'colorTheme'}],
-      group: 'theme',
+      name: 'showHero',
+      title: 'Show hero',
+      type: 'boolean',
+      description: 'If disabled, page title will be displayed instead',
+      group: 'editorial',
     }),
+    // // Hero
+    defineField({
+      name: 'hero',
+      title: 'Hero',
+      type: 'internationalizedArrayHero.collection',
+      hidden: ({document}) => !document?.showHero,
+      group: 'editorial',
+    }),
+    // Banner
+    defineField({
+      name: 'banner',
+      title: 'Banner',
+      type: 'array',
+      of: [
+       
+        {type: 'module.image'},
+        {type: 'module.banner'},
+        
+      ],
+      group: 'editorial',
+    }),
+    // Collection Image
+    defineField({
+      name: 'collectionImage',
+      title: 'Collection Image',
+      type: 'image',
+      group: 'editorial',
+    }),
+
     // Vector
     defineField({
       name: 'vector',
@@ -93,28 +122,26 @@ export default defineType({
           return true
         }),
     }),
-    // Show hero
+    // Color theme
     defineField({
-      name: 'showHero',
-      title: 'Show hero',
-      type: 'boolean',
-      description: 'If disabled, page title will be displayed instead',
-      group: 'editorial',
+      name: 'colorTheme',
+      title: 'Color theme',
+      type: 'reference',
+      to: [{type: 'colorTheme'}],
+      group: 'theme',
     }),
-    // // Hero
-    defineField({
-      name: 'hero',
-      title: 'Hero',
-      type: 'hero.collection',
-      hidden: ({document}) => !document?.showHero,
-      group: 'editorial',
-    }),
+    
     // // Modules
     defineField({
       name: 'modules',
       title: 'Modules',
       type: 'array',
-      description: 'Editorial modules to associate with this collection',
+      description: (
+        <>
+          Editorial modules to associate with this collection.{' '}
+          <em>Only shown on the English site</em>
+        </>
+      ),
       of: [
         {type: 'module.callout'},
         {type: 'module.callToAction'},
@@ -154,6 +181,7 @@ export default defineType({
   preview: {
     select: {
       imageUrl: 'store.imageUrl',
+      //imageUrl: 'collectionImage',
       isDeleted: 'store.isDeleted',
       rules: 'store.rules',
       title: 'store.title',

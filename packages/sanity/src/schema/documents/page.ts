@@ -1,7 +1,7 @@
 import {DocumentIcon} from '@sanity/icons'
 import {defineField} from 'sanity'
 
-import {validateSlug} from '../../utils/validateSlug'
+import {isUniqueOtherThanLanguage, validateSlug} from '../../utils/validateSlug'
 
 export default defineField({
   name: 'page',
@@ -30,22 +30,15 @@ export default defineField({
       title: 'Title',
       type: 'string',
       validation: (Rule) => Rule.required(),
+      group: 'editorial',
     }),
     // Slug
     defineField({
       name: 'slug',
       type: 'slug',
-      options: {source: 'title'},
-      // @ts-ignore - TODO - fix this TS error
+      options: {source: 'title', isUnique: isUniqueOtherThanLanguage},
+      // @ts-expect-error - TODO - fix this TS error
       validation: validateSlug,
-    }),
-    // Color theme
-    defineField({
-      name: 'colorTheme',
-      title: 'Color theme',
-      type: 'reference',
-      to: [{type: 'colorTheme'}],
-      group: 'theme',
     }),
     // Show hero
     defineField({
@@ -64,11 +57,48 @@ export default defineField({
       hidden: ({document}) => !document?.showHero,
       group: 'editorial',
     }),
+    // Banner
+    defineField({
+      name: 'banner',
+      title: 'Banner',
+      type: 'array',
+      of: [
+        {type: 'module.callout'},
+        {type: 'module.callToAction'},
+        {type: 'module.collection'},
+        {type: 'module.image'},
+        {type: 'module.instagram'},
+        {type: 'module.product'},
+      ],
+      group: 'editorial',
+    }),
+    // Image
+    defineField({
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      group: 'editorial',
+    }),
     // Body
     defineField({
       name: 'body',
       title: 'Body',
       type: 'body',
+      group: 'editorial',
+    }),
+    // Page Modules
+    defineField({
+      name: 'modules',
+      title: 'Page Modules',
+      type: 'array',
+      of: [
+        {type: 'module.callout'},
+        {type: 'module.callToAction'},
+        {type: 'module.collection'},
+        {type: 'module.image'},
+        {type: 'module.instagram'},
+        {type: 'module.product'},
+      ],
       group: 'editorial',
     }),
     // SEO
@@ -78,19 +108,36 @@ export default defineField({
       type: 'seo.page',
       group: 'seo',
     }),
+    defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      hidden: true,
+    }),
+    // Color theme
+    defineField({
+      name: 'colorTheme',
+      title: 'Color theme',
+      type: 'reference',
+      to: [{type: 'colorTheme'}],
+      group: 'theme',
+    }),
+    
   ],
   preview: {
     select: {
       active: 'active',
       seoImage: 'seo.image',
       title: 'title',
+      language: 'language',
     },
     prepare(selection) {
-      const {seoImage, title} = selection
+      const {seoImage, title, language} = selection
 
       return {
         media: seoImage,
         title,
+        subtitle: language?.toUpperCase(),
       }
     },
   },

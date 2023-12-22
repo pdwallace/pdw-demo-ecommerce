@@ -9,18 +9,18 @@ export default defineField({
   fields: [
     defineField({
       name: 'name',
-      type: 'string',
+      type: 'internationalizedArrayString',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'story',
-      type: 'simpleBlockContent',
+      type: 'internationalizedArraySimpleBlockContent',
     }),
     defineField({
       name: 'faqs',
       title: 'FAQs',
       description: 'Shown on products using this material',
-      type: 'faqs',
+      type: 'internationalizedArrayFaqs',
     }),
     defineField({
       name: 'attributes',
@@ -31,7 +31,11 @@ export default defineField({
           type: 'boolean',
         }),
         defineField({
-          name: 'dishwasherSafe',
+          name: 'washingMachineSafe',
+          type: 'boolean',
+        }),
+        defineField({
+          name: 'dryCleanOnly',
           type: 'boolean',
         }),
       ],
@@ -41,4 +45,14 @@ export default defineField({
       },
     }),
   ],
+  preview: {
+    select: {
+      title: 'name',
+    },
+    prepare({title}) {
+      return {
+        title: title?.[0]?.value,
+      }
+    },
+  },
 })

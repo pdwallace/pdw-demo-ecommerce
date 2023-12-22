@@ -12,6 +12,8 @@ import {
 } from "~/lib/utils";
 import type { ProductWithNodes } from "~/types/shopify";
 
+import { Label } from "../global/Label";
+
 type Props = {
   imageAspectClassName?: string;
   storefrontProduct: ProductWithNodes;
@@ -66,7 +68,8 @@ export default function ProductCard({
         >
           {firstVariant.image && (
             <Image
-              className="absolute h-full w-full transform bg-cover bg-center object-cover object-center ease-in-out"
+              //className="absolute h-full w-full transform bg-cover bg-center object-cover object-center ease-in-out"
+              className="absolute h-full w-full transform bg-cover bg-center object-center ease-in-out"
               data={firstVariant.image}
               crop="center"
               sizes="100%"
@@ -105,7 +108,7 @@ export default function ProductCard({
                 totalValue: parseFloat(productAnalytics.price),
               }}
             >
-              Quick add
+              <Label _key="cart.quickAdd" />
             </AddToCartButton>
           </div>
         )}

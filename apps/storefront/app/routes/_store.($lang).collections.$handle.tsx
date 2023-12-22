@@ -5,10 +5,10 @@ import {
   useSearchParams,
 } from "@remix-run/react";
 import { AnalyticsPageType, type SeoHandleFunction } from "@shopify/hydrogen";
-import { Collection } from "@shopify/hydrogen/storefront-api-types";
+import { type Collection as CollectionType } from "@shopify/hydrogen/storefront-api-types";
 import {
   defer,
-  type LoaderArgs,
+  type LoaderFunctionArgs,
   type SerializeFrom,
 } from "@shopify/remix-oxygen";
 import clsx from "clsx";
@@ -19,7 +19,9 @@ import invariant from "tiny-invariant";
 import ProductGrid from "~/components/collection/ProductGrid";
 import SortOrder from "~/components/collection/SortOrder";
 import { SORT_OPTIONS } from "~/components/collection/SortOrder";
+import { Label } from "~/components/global/Label";
 import CollectionHero from "~/components/heroes/Collection";
+import Banner from "~/components/modules/Banner";
 import type { SanityCollectionPage, SanityHeroHome } from "~/lib/sanity";
 import { ColorTheme } from "~/lib/theme";
 import { fetchGids, notFound, validateLocale } from "~/lib/utils";
@@ -47,8 +49,9 @@ export type SortParam =
 
 const PAGINATION_SIZE = 12;
 
-export async function loader({ params, context, request }: LoaderArgs) {
+export async function loader({ params, context, request }: LoaderFunctionArgs) {
   validateLocale({ context, params });
+  const language = context.storefront.i18n.language.toLowerCase();
 
   const { handle } = params;
   const searchParams = new URL(request.url).searchParams;
@@ -71,10 +74,11 @@ export async function loader({ params, context, request }: LoaderArgs) {
       query: COLLECTION_PAGE_QUERY,
       params: {
         slug: params.handle,
+        language,
       },
       cache,
     }),
-    context.storefront.query<{ collection: Collection }>(COLLECTION_QUERY, {
+    context.storefront.query<{ collection: CollectionType }>(COLLECTION_QUERY, {
       variables: {
         handle,
         cursor,
@@ -94,6 +98,7 @@ export async function loader({ params, context, request }: LoaderArgs) {
   const gids = fetchGids({ page, context });
 
   return defer({
+    language,
     page,
     collection,
     gids,
@@ -107,7 +112,7 @@ export async function loader({ params, context, request }: LoaderArgs) {
 }
 
 export default function Collection() {
-  const { collection, page, gids } =
+  const { language, collection, page, gids } =
     useLoaderData<SerializeFrom<typeof loader>>();
   const [params] = useSearchParams();
   const sort = params.get("sort");
@@ -119,18 +124,24 @@ export default function Collection() {
     <SanityPreview
       data={page}
       query={COLLECTION_PAGE_QUERY}
-      params={{ slug: handle }}
+      params={{ slug: handle, language }}
     >
       {(page) => (
         <ColorTheme value={page?.colorTheme}>
           <Suspense>
             <Await resolve={gids}>
               {/* Hero */}
-              <CollectionHero
-                fallbackTitle={page?.title || collection?.title}
-                hero={page?.hero as SanityHeroHome}
-              />
-
+              {/* {!page?.banner && ( */}
+                <CollectionHero
+                  fallbackTitle={collection?.title}
+                  hero={page?.hero as SanityHeroHome}
+                />
+              {/* )} */}
+              {page?.banner && (
+                <div className={clsx("mb-1 mt-24 px-4", "md:px-8")}>
+                  <Banner items={page.banner} />
+                </div>
+              )}
               <div
                 className={clsx(
                   "mb-32 mt-8 px-4", //
@@ -154,7 +165,7 @@ export default function Collection() {
                 {/* No results */}
                 {products.length === 0 && (
                   <div className="mt-16 text-center text-lg text-darkGray">
-                    No products.
+                    <Label _key="collection.noResults" />
                   </div>
                 )}
 

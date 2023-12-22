@@ -78,9 +78,9 @@ export default function ProductGallery({
   }
 
   return (
-    <div className="relative h-screen bg-lightGray" tabIndex={-1}>
-      <div className="h-full overflow-hidden" ref={emblaRef}>
-        <div className="flex h-full">
+    <div className="relative  bg-lightGray" tabIndex={-1}>
+      <div className=" overflow-hidden" ref={emblaRef}>
+        <div className="flex">
           {/* Slides */}
           {media.map((med) => {
             let extraProps: Record<string, any> = {};
@@ -108,7 +108,7 @@ export default function ProductGallery({
 
             return (
               <MediaFile
-                className="relative flex w-full shrink-0 grow-0 select-none object-cover"
+                className="relative  max-w-xl flex w-full shrink-0 grow-0 select-none object-cover"
                 data={data}
                 draggable={false}
                 key={med.id}

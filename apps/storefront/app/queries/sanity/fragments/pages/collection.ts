@@ -3,6 +3,7 @@ import groq from "groq";
 import { COLOR_THEME } from "../colorTheme";
 import { HERO_COLLECTION } from "../heroes/collection";
 import { MODULES } from "../modules";
+import { BANNER } from "../banner";
 import { SEO_SHOPIFY } from "../seoShopify";
 
 export const COLLECTION_PAGE = groq`
@@ -11,12 +12,17 @@ export const COLLECTION_PAGE = groq`
     ${COLOR_THEME}
   },
   (showHero == true) => {
-    hero {
+    "hero": hero[_key == $language][0].value {
       ${HERO_COLLECTION}
     },
   },
-  modules[] {
-    ${MODULES}
+  banner[] {
+    ${BANNER}
+  },
+  ($language == "en") => {
+    modules[] {
+      ${MODULES}
+    },
   },
   ${SEO_SHOPIFY},
   "slug": store.slug.current,

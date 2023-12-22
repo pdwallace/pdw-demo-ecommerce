@@ -13,11 +13,28 @@ export interface SanityAssetImage extends Image {
   width: number;
 }
 
+export type SanityLabel = {
+  key: string;
+  text: string;
+};
+
+export type SanityLayout = {
+  seo: SanitySeo;
+  menuLinks?: SanityMenuLink[];
+  footer?: {
+    links?: SanityLink[];
+    text?: PortableTextBlock[];
+  };
+  notFoundPage?: SanityNotFoundPage;
+  labels?: SanityLabel[];
+};
+
 export type SanityCollection = {
   _id: string;
   colorTheme: SanityColorTheme;
   gid: string;
   hero?: SanityHeroPage;
+  collectionImage?: SanityAssetImage;
   slug?: string;
   title: string;
   vector?: string;
@@ -27,6 +44,7 @@ export type SanityCollectionPage = {
   _id: string;
   colorTheme: SanityColorTheme;
   hero?: SanityHeroCollection;
+  banner: (SanityModuleImage | SanityModuleInstagram)[];
   modules: (SanityModuleImage | SanityModuleInstagram)[];
   seo: SanitySeo;
   slug?: string;
@@ -94,6 +112,7 @@ export type SanityHeroPage = {
 export type SanityHomePage = {
   hero?: SanityHeroHome;
   modules: (SanityModuleImage | SanityModuleInstagram)[];
+  banner: (SanityModuleImage | SanityModuleInstagram)[];
   seo: SanitySeo;
 };
 
@@ -270,8 +289,32 @@ export type SanityPage = {
   body: PortableTextBlock[];
   colorTheme?: SanityColorTheme;
   hero?: SanityHeroPage;
+  banner: (SanityModuleImage | SanityModuleInstagram)[];
+  modules: (SanityModuleImage | SanityModuleInstagram)[];
   seo: SanitySeo;
   title: string;
+};
+
+export type SanityArticle = {
+  body: PortableTextBlock[];
+  colorTheme?: SanityColorTheme;
+  hero?: SanityHeroPage;
+  banner: (SanityModuleImage | SanityModuleInstagram)[];
+  modules: (SanityModuleImage | SanityModuleInstagram)[];
+  seo: SanitySeo;
+  title: string;
+  creators: SanityCreator[];
+};
+
+export type SanityLandingPage = {
+  body: PortableTextBlock[];
+  colorTheme?: SanityColorTheme;
+  hero?: SanityHeroPage;
+  banner: (SanityModuleImage | SanityModuleInstagram)[];
+  modules: (SanityModuleImage | SanityModuleInstagram)[];
+  seo: SanitySeo;
+  title: string;
+  creators: SanityCreator[];
 };
 
 export type SanityProductHotspot = {

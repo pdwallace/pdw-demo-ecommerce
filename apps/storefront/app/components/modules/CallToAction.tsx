@@ -1,4 +1,3 @@
-import { useMatches } from "@remix-run/react";
 import clsx from "clsx";
 
 import Link from "~/components/elements/Link";
@@ -9,6 +8,7 @@ import type {
   SanityModuleCallToAction,
   SanityProductWithVariant,
 } from "~/lib/sanity";
+import { useRootLoaderData } from "~/root";
 
 type Props = {
   module: SanityModuleCallToAction;
@@ -23,7 +23,8 @@ export default function CallToActionModule({ module }: Props) {
         module.layout === "right" && "flex-col-reverse md:flex-row-reverse"
       )}
     >
-      <div className="relative aspect-[864/485] grow">
+      {/* <div className="relative aspect-[864/485] grow"> */}
+      <div className="relative aspect-[10/10] grow">
         {module.content && <ModuleContent content={module.content} />}
       </div>
 
@@ -69,8 +70,7 @@ function ModuleContent({
 }: {
   content: SanityAssetImage | SanityProductWithVariant;
 }) {
-  const [root] = useMatches();
-  const { sanityDataset, sanityProjectID } = root.data;
+  const { sanityDataset, sanityProjectID } = useRootLoaderData();
 
   switch (content?._type) {
     case "image": {
@@ -81,7 +81,7 @@ function ModuleContent({
           dataset={sanityDataset}
           hotspot={content?.hotspot}
           layout="fill"
-          objectFit="cover"
+          objectFit="contain"
           projectId={sanityProjectID}
           sizes="100vw"
           src={content?.asset?._ref}

@@ -20,17 +20,22 @@ export default defineField({
     },
   ],
   fields: [
-    // Hero
+    // Banner
     defineField({
-      name: 'hero',
-      title: 'Hero',
-      type: 'hero.home',
+      name: 'banner',
+      title: 'Banner',
+      type: 'array',
+      of: [
+        {type: 'module.image'},
+        {type: 'module.banner'},
+        
+      ],
       group: 'editorial',
     }),
-    // Modules
+    // Page Modules
     defineField({
       name: 'modules',
-      title: 'Modules',
+      title: 'Page Modules',
       type: 'array',
       of: [
         {type: 'module.callout'},
@@ -39,7 +44,18 @@ export default defineField({
         {type: 'module.image'},
         {type: 'module.instagram'},
         {type: 'module.product'},
+        {type: 'module.grid'},
+        {type: 'module.promo'},
+        
+        
       ],
+      group: 'editorial',
+    }),
+    // Hero
+    defineField({
+      name: 'hero',
+      title: 'Hero',
+      type: 'hero.home',
       group: 'editorial',
     }),
     // SEO
@@ -49,13 +65,22 @@ export default defineField({
       type: 'seo.home',
       group: 'seo',
     }),
+    defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      hidden: true,
+    }),
   ],
   preview: {
-    prepare() {
+    select: {
+      language: 'language',
+    },
+    prepare({language}) {
       return {
         // media: icon,
-        subtitle: 'Index',
         title: TITLE,
+        subtitle: language.toUpperCase(),
       }
     },
   },

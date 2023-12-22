@@ -20,6 +20,8 @@ export const PAGE_REFERENCES = [
   {type: 'page'},
   {type: 'product'},
   {type: 'guide'},
+  {type: 'article'},
+  {type: 'landingPage'}
 ]
 
 // API version to use when using the Sanity client within the studio
@@ -30,3 +32,8 @@ export const SANITY_API_VERSION = '2022-10-25'
  * Environment symbol to set on `window`
  */
 export const ENVIRONMENT = Symbol('Sanity Environment')
+
+export const LANGUAGES = [
+  {id: 'en', title: 'English', icon: '🇬🇧', previewUrl: ''},
+  {id: 'no', title: 'Norwegian', icon: '🇳🇴', previewUrl: 'no-no'},
+]

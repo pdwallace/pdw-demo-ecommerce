@@ -24,13 +24,16 @@ const CLASSES = {
     start: "justify-start",
   },
   imageAspect: {
-    landscape: "aspect-square md:aspect-[16/9]",
+    //landscape: "aspect-square md:aspect-[16/9]",
     square: "aspect-square",
   },
   width: {
-    sm: "w-full md:w-[55%]",
-    md: "w-full md:w-[65%]",
-    lg: "w-full md:w-full",
+    //sm: "w-full md:w-[55%]",
+    //md: "w-full md:w-[65%]",
+    //lg: "w-full md:w-full",
+    sm: "w-full md:w-[100%]",
+    md: "w-full md:w-[100%]",
+    lg: "w-full md:w-[100%]",
   },
 };
 
@@ -48,19 +51,22 @@ const PRODUCT_LAYOUT = [
     aspect: "square",
     flex: { align: "start", justify: "end" },
     offsetY: false,
-    width: "lg",
+    width: "md",
+    //width: "lg",
   },
   {
     aspect: "square",
     flex: { align: "start", justify: "start" },
     offsetY: false,
-    width: "lg",
+    width: "md",
+    //width: "lg",
   },
   {
     aspect: "square",
     flex: { align: "center", justify: "start" },
     offsetY: false,
-    width: "sm",
+    width: "md",
+    //width: "sm",
   },
   {
     aspect: "square",
@@ -78,13 +84,15 @@ const PRODUCT_LAYOUT = [
     aspect: "square",
     flex: { align: "start", justify: "start" },
     offsetY: false,
-    width: "lg",
+    //width: "lg",
+    width: "md",
   },
   {
     aspect: "landscape",
     flex: { align: "center", justify: "end" },
     offsetY: false,
-    width: "lg",
+    //width: "lg",
+    width: "md",
   },
 ] as const;
 
@@ -94,7 +102,7 @@ type Props = {
 
 export default function ModuleGrid({ items }: Props) {
   return (
-    <ul className="grid grid-cols-1 gap-x-[7.5vw] gap-y-[7.5vw] md:grid-cols-2">
+    <ul className="grid grid-cols-1 gap-x-[1vw] gap-y-[1vw] md:grid-cols-3">
       {items.map((item, index) => {
         const productLayout = PRODUCT_LAYOUT[index % PRODUCT_LAYOUT.length];
         const productImageAspect = CLASSES.imageAspect[productLayout.aspect];
@@ -102,7 +110,8 @@ export default function ModuleGrid({ items }: Props) {
         const productLayoutClasses = clsx([
           CLASSES.flexAlign[productLayout.flex.align],
           CLASSES.flexJustify[productLayout.flex.justify],
-          productLayout.offsetY ? "md:mt-[5vw]" : "mt-0",
+          //productLayout.offsetY ? "md:mt-[5vw]" : "mt-0",
+          productLayout.offsetY ? "md:mt-0" : "mt-0",
         ]);
 
         if (isModule(item)) {
@@ -133,6 +142,14 @@ export default function ModuleGrid({ items }: Props) {
         } else {
           // Render product cards
           return (
+            // <li className={productLayoutClasses} key={item.id}>
+            //   <div className={productWidth}>
+            //     <ProductCard
+            //       imageAspectClassName={productImageAspect}
+            //       storefrontProduct={item}
+            //     />
+            //   </div>
+            // </li>
             <li className={productLayoutClasses} key={item.id}>
               <div className={productWidth}>
                 <ProductCard
